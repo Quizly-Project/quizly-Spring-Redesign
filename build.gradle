@@ -1,0 +1,88 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.1'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'Team9789'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+//	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// 개발을 위해 h2 데이터베이스 사용
+	runtimeOnly 'com.h2database:h2'
+
+	// https://mvnrepository.com/artifact/com.querydsl/querydsl-sql-spring
+	implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: '5.0.0'
+
+	// https://mvnrepository.com/artifact/com.querydsl/querydsl-apt
+	implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
+
+	//ModelMapper
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
+
+	//Jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+
+	// Other dependencies
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+	// 캐시도 없애주고, 리로딩 되도록 해줌(더 많은 기능 제공)
+	implementation 'org.springframework.boot:spring-boot-devtools'
+
+	// JUnit 5
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+
+	// Mockito
+	testImplementation 'org.mockito:mockito-core:3.9.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:3.9.0'
+
+	// Swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'	//Swagger
+
+
+}
+
+'test' {
+	useJUnitPlatform()
+}
+compileJava {
+	options.compilerArgs << '-parameters'
+}
