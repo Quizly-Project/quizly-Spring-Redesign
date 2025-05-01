@@ -1,11 +1,7 @@
-package Team9789.quizly_Spring.dto;
+package Team9789.quizly_Spring.dto.quiz;
 
 import Team9789.quizly_Spring.entity.StudentResult;
 import lombok.Data;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class StudentResultDto {

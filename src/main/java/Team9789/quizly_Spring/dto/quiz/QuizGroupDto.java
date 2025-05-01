@@ -1,8 +1,7 @@
-package Team9789.quizly_Spring.dto;
+package Team9789.quizly_Spring.dto.quiz;
 
 import Team9789.quizly_Spring.entity.Quiz;
 import Team9789.quizly_Spring.entity.QuizGroup;
-import Team9789.quizly_Spring.entity.QuizType;
 import lombok.Data;
 
 import java.util.ArrayList;

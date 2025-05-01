@@ -1,6 +1,6 @@
 package Team9789.quizly_Spring.service.login;
 
-import Team9789.quizly_Spring.dto.CustomUserDetails;
+import Team9789.quizly_Spring.dto.user.CustomUserDetails;
 import Team9789.quizly_Spring.entity.UserEntity;
 import Team9789.quizly_Spring.repository.login.UserRepository;
 import lombok.RequiredArgsConstructor;

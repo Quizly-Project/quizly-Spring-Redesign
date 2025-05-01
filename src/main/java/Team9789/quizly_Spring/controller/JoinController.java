@@ -1,6 +1,7 @@
 package Team9789.quizly_Spring.controller;
 
-import Team9789.quizly_Spring.dto.JoinDTO;
+import Team9789.quizly_Spring.dto.user.JoinDTO;
+import Team9789.quizly_Spring.exception.UserExistException;
 import Team9789.quizly_Spring.service.login.JoinService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class JoinController {
         try {
             joinService.joinProcess(joinDTO);
             return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (UserExistException e) {
             return new ResponseEntity<>("User registration failed", HttpStatus.BAD_REQUEST);
         }
     }

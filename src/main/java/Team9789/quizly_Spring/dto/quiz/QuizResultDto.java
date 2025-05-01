@@ -1,8 +1,7 @@
-package Team9789.quizly_Spring.dto;
+package Team9789.quizly_Spring.dto.quiz;
 
 import Team9789.quizly_Spring.entity.QuizResult;
 import lombok.Data;
-import org.hibernate.id.IntegralDataTypeHolder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

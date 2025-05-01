@@ -1,14 +1,13 @@
 package Team9789.quizly_Spring.controller.api.quizresult;
 
-import Team9789.quizly_Spring.dto.QuizResultDto;
+import Team9789.quizly_Spring.dto.quiz.QuizResultDto;
 import Team9789.quizly_Spring.dto.ResultDto;
-import Team9789.quizly_Spring.dto.UserDto;
+import Team9789.quizly_Spring.dto.user.UserDto;
 import Team9789.quizly_Spring.dto.request.quizresult.CreateQuizResultRequest;
 import Team9789.quizly_Spring.service.quizresult.QuizResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;

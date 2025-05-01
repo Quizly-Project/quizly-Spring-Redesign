@@ -1,4 +1,4 @@
-package Team9789.quizly_Spring.dto;
+package Team9789.quizly_Spring.dto.user;
 
 import lombok.Data;
 

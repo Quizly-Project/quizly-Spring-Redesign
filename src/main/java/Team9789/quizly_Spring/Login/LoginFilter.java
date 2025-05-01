@@ -1,6 +1,8 @@
-package Team9789.quizly_Spring.jwt;
+package Team9789.quizly_Spring.Login;
 
-import Team9789.quizly_Spring.dto.LoginDTO;
+import Team9789.quizly_Spring.dto.user.LoginDTO;
+import Team9789.quizly_Spring.jwt.JwtProvider;
+import Team9789.quizly_Spring.service.token.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ import java.io.IOException;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final AuthenticationSuccessHandler successHandler;
 
     // 로그인 시도
     @Override
@@ -55,12 +59,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     // 인증 성공시
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+        successHandler.onAuthenticationSuccess(request, response, chain, authResult);
     }
 
-    // 인증 실패시
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        super.unsuccessfulAuthentication(request, response, failed);
-    }
 }

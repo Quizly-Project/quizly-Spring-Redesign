@@ -1,8 +1,7 @@
-package Team9789.quizly_Spring.dto;
+package Team9789.quizly_Spring.dto.user;
 
 import Team9789.quizly_Spring.entity.UserEntity;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,8 @@
 package Team9789.quizly_Spring.service.quizgroup;
 
 import Team9789.quizly_Spring.exception.NotEqualsUserException;
-import Team9789.quizly_Spring.dto.QuizGroupDto;
-import Team9789.quizly_Spring.dto.UserDto;
+import Team9789.quizly_Spring.dto.quiz.QuizGroupDto;
+import Team9789.quizly_Spring.dto.user.UserDto;
 import Team9789.quizly_Spring.dto.request.quizgroup.CreateQuizGroupRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateOptionRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateQuizGroupRequest;
