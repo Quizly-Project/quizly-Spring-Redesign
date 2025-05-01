@@ -11,9 +11,8 @@ import Team9789.quizly_Spring.entity.Quiz;
 import Team9789.quizly_Spring.entity.QuizGroup;
 import Team9789.quizly_Spring.entity.QuizOption;
 import Team9789.quizly_Spring.entity.UserEntity;
-import Team9789.quizly_Spring.exception.NotFindQuizGroupException;
+import Team9789.quizly_Spring.repository.login.UserRepository;
 import Team9789.quizly_Spring.repository.quizgroup.QuizGroupCommandRepository;
-import Team9789.quizly_Spring.repository.UserRepository;
 import Team9789.quizly_Spring.repository.quizgroup.QuizGroupQueryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,9 +78,8 @@ public class QuizGroupServiceImpl implements QuizGroupService{
     @Override
     @Transactional
     public Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest request) {
-        UserEntity userEntity = userRepository.findById(userDto.getUserId()).get();
-
-        QuizGroup quizGroups = QuizGroup.createQuizGroup(userEntity, request.getQuizTitle(), request.getQuizGroupDescription(), request.getQuizzes());
+        Optional<UserEntity> result = userRepository.findByUsername(userDto.getUsername());
+        QuizGroup quizGroups = QuizGroup.createQuizGroup(result.get(), request.getQuizTitle(), request.getQuizGroupDescription(), request.getQuizzes());
         return quizGroupCommandRepository.saveQuizGroup(quizGroups);
     }
 

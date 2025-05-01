@@ -1,7 +1,7 @@
 package Team9789.quizly_Spring.controller;
 
 import Team9789.quizly_Spring.dto.JoinDTO;
-import Team9789.quizly_Spring.service.JoinService;
+import Team9789.quizly_Spring.service.login.JoinService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

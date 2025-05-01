@@ -1,36 +1,29 @@
 package Team9789.quizly_Spring.dto;
 
 import Team9789.quizly_Spring.entity.UserEntity;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+@Builder
 public class CustomUserDetails implements UserDetails {
 
     private final UserEntity userEntity;
 
     public CustomUserDetails(UserEntity userEntity) {
-
         this.userEntity = userEntity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        collection.add(new GrantedAuthority() {
-
-            @Override
-            public String getAuthority() {
-
-                return userEntity.getRole();
-            }
-        });
+        collection.add(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().name()));
 
         return collection;
     }
@@ -42,27 +35,26 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-
         return userEntity.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return userEntity.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return userEntity.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return userEntity.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userEntity.isEnabled();
     }
 }

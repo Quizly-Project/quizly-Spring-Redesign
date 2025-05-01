@@ -5,7 +5,6 @@ import Team9789.quizly_Spring.dto.UserDto;
 import Team9789.quizly_Spring.dto.request.quizgroup.*;
 import Team9789.quizly_Spring.entity.QuizType;
 import Team9789.quizly_Spring.entity.UserEntity;
-import Team9789.quizly_Spring.repository.UserRepository;
 import Team9789.quizly_Spring.service.quizgroup.QuizGroupService;
 import jakarta.persistence.EntityManager;
 
