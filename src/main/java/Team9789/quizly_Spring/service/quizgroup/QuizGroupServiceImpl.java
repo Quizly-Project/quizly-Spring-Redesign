@@ -11,6 +11,7 @@ import Team9789.quizly_Spring.entity.Quiz;
 import Team9789.quizly_Spring.entity.QuizGroup;
 import Team9789.quizly_Spring.entity.QuizOption;
 import Team9789.quizly_Spring.entity.UserEntity;
+import Team9789.quizly_Spring.exception.NotFindQuizGroupException;
 import Team9789.quizly_Spring.repository.quizgroup.QuizGroupCommandRepository;
 import Team9789.quizly_Spring.repository.UserRepository;
 import Team9789.quizly_Spring.repository.quizgroup.QuizGroupQueryRepository;
@@ -41,7 +42,7 @@ public class QuizGroupServiceImpl implements QuizGroupService{
      */
     @Override
     public List<QuizGroupDto> getQuizGroupByName(String username, int offset, int limit) {
-        List<QuizGroup> quizGroups = quizGroupQueryRepository.findQuizGroupByUserName(username, offset, limit);
+        List<QuizGroup> quizGroups = quizGroupQueryRepository.getQuizGroupByUserName(username, offset, limit);
 
         List<QuizGroupDto> quizGroupDtos = quizGroups.stream()
                 .map(quizGroup -> new QuizGroupDto(quizGroup))
@@ -55,7 +56,7 @@ public class QuizGroupServiceImpl implements QuizGroupService{
      */
     @Override
     public List<QuizGroupDto> getQuizGroupAll(int offset, int limit) {
-        List<QuizGroup> quizGroups = quizGroupQueryRepository.findQuizGroupAll(offset, limit);
+        List<QuizGroup> quizGroups = quizGroupQueryRepository.getQuizGroupAll(offset, limit);
 
         List<QuizGroupDto> quizGroupDtos = quizGroups.stream()
                 .map(quizGroup -> new QuizGroupDto(quizGroup))
@@ -66,7 +67,7 @@ public class QuizGroupServiceImpl implements QuizGroupService{
 
     @Override
     public QuizGroupDto getQuizGroupOne(Long quizGroupId) {
-        QuizGroup quizGroup = quizGroupQueryRepository.findQuizGroupOne(quizGroupId).get(0);
+        QuizGroup quizGroup = quizGroupQueryRepository.getQuizGroupOne(quizGroupId).get(0);
 
         return new QuizGroupDto(quizGroup);
     }
@@ -89,14 +90,14 @@ public class QuizGroupServiceImpl implements QuizGroupService{
     @Override
     @Transactional
     public Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest request) throws NotEqualsUserException{
-        QuizGroup findQuizGroup = quizGroupQueryRepository.findQuizGroupOne(request.getQuizGroupId()).get(0);
+        QuizGroup findQuizGroup = quizGroupQueryRepository.getQuizGroupOne(request.getQuizGroupId()).get(0);
 
         if (!findQuizGroup.getId().equals(Long.valueOf(userDto.getUserId()))) return 1L;
 
         findQuizGroup.updateQuizGroup(request.getQuizTitle(), request.getQuizGroupDescription());
 
         for (UpdateQuizRequest quiz : request.getQuizzes()) {
-            Quiz currQuiz = quizGroupQueryRepository.findQuizOne(quiz.getQuizId()).get(0);
+            Quiz currQuiz = quizGroupQueryRepository.getQuizOne(quiz.getQuizId()).get(0);
 
             currQuiz.updateQuiz(
                     quiz.getQuestion(),
@@ -106,7 +107,7 @@ public class QuizGroupServiceImpl implements QuizGroupService{
             );
 
             for (UpdateOptionRequest option : quiz.getQuizOptions()) {
-                QuizOption currOption = quizGroupQueryRepository.findQuizOptionOne(option.getOptionId());
+                QuizOption currOption = quizGroupQueryRepository.getQuizOptionOne(option.getOptionId());
 
                 currOption.updateQuizOption(
                         option.getOptionText(),
@@ -123,7 +124,7 @@ public class QuizGroupServiceImpl implements QuizGroupService{
     @Override
     @Transactional
     public Long removeQuizGroup(UserDto userDto, Long quizGroupId) {
-        QuizGroup findQuizGroup = quizGroupQueryRepository.findQuizGroupOne(quizGroupId)
+        QuizGroup findQuizGroup = quizGroupQueryRepository.getQuizGroupOne(quizGroupId)
                 .stream().findFirst().orElseThrow(() -> new EntityNotFoundException("삭제할 데이터가 존재하지 않습니다."));
 
         if (!findQuizGroup.getId().equals(Long.valueOf(userDto.getUserId())))

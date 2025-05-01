@@ -12,20 +12,20 @@ public interface QuizGroupQueryRepository {
 
     //== API Query ==//
 
-    List<QuizGroup> findQuizGroupByUserName(String name, int offset, int limit);
+    List<QuizGroup> getQuizGroupByUserName(String name, int offset, int limit);
 
-    List<QuizGroup> findQuizGroupAll(int offset, int limit);
+    List<QuizGroup> getQuizGroupAll(int offset, int limit);
 
     //== API Query ==//
 
 
     //== Business Query ==//
 
-    List<QuizGroup> findQuizGroupOne(Long quizGroupId);
+    List<QuizGroup> getQuizGroupOne(Long quizGroupId);
 
-    List<Quiz> findQuizOne(Long quizId);
+    List<Quiz> getQuizOne(Long quizId);
 
-    QuizOption findQuizOptionOne(Long quizOptionId);
+    QuizOption getQuizOptionOne(Long quizOptionId);
 
     //== Business Query ==//
 }

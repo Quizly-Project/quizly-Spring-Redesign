@@ -31,6 +31,7 @@ public class QuizOption {
         this.optionNum = optionNum;
     }
 
+    //== 변경 메서드 ==//
     public void changeQuiz(Quiz quiz) {
         this.quiz = quiz;
     }
@@ -50,6 +51,7 @@ public class QuizOption {
 
     }
 
+    //== 수정 메서드 ==//
     public void updateQuizOption(String optionText, Integer optionNum) {
         this.changeOptionText(optionText);
         this.changeOptionNum(optionNum);

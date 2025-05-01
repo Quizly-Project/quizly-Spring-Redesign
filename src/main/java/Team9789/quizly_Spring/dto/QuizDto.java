@@ -25,6 +25,7 @@ public class QuizDto {
     public QuizDto(Quiz quiz) {
         this.quizId = quiz.getId(); // batchSize로 가져온다.
         this.question = quiz.getQuestion();
+        this.quizType = quiz.getQuizType();
         this.explanation = quiz.getExplanation();
         this.quizScore = quiz.getQuizScore();
         this.regDate = quiz.getRegDate();

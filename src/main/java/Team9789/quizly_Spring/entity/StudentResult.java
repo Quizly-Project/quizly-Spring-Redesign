@@ -41,7 +41,7 @@ public class StudentResult {
         this.totalScore = totalScore;
     }
 
-    //== 연관 관계 편의 메서드 ==//
+    //== 연관관계 편의 메서드 ==//
     public void changeQuizResult(QuizResult quizResult) {
         this.quizResult = quizResult;
     }

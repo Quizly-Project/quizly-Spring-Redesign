@@ -6,6 +6,9 @@ import Team9789.quizly_Spring.dto.UserDto;
 import Team9789.quizly_Spring.dto.request.quizresult.CreateQuizResultRequest;
 import Team9789.quizly_Spring.service.quizresult.QuizResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,12 +24,12 @@ public class QuizResultApiControllerImpl implements QuizResultApiController {
      */
     @Override
     @PostMapping("/api/v1/quizResults")
-    public ResultDto<String> saveQuizResultV1(CreateQuizResultRequest request) {
+    public ResponseEntity<ResultDto<String>> saveQuizResultV1(CreateQuizResultRequest request) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
         String roomCode = quizResultService.saveQuizResult(userDto, request);
-        return new ResultDto<String>("퀴즈 결과 저장", roomCode);
+        return new ResponseEntity<ResultDto<String>>(new ResultDto<>("퀴즈 결과 저장", roomCode), HttpStatus.OK);
     }
 
     /**
@@ -34,9 +37,9 @@ public class QuizResultApiControllerImpl implements QuizResultApiController {
      */
     @Override
     @GetMapping("/api/v1/quizResults/{roomCode}")
-    public ResultDto<QuizResultDto> findQuizResultByRoomCodeV1(String roomCode) {
+    public ResponseEntity<ResultDto<QuizResultDto>> findQuizResultByRoomCodeV1(String roomCode) {
         QuizResultDto quizResultDto = quizResultService.getQuizResult(roomCode);
-        return new ResultDto<QuizResultDto>("퀴즈 결과 조회", quizResultDto);
+        return new ResponseEntity<ResultDto<QuizResultDto>>(new ResultDto<>("퀴즈 결과 조회", quizResultDto), HttpStatus.OK);
     }
 
     // 임시 유저 데이터 사용

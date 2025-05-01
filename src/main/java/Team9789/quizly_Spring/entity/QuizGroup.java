@@ -67,7 +67,7 @@ public class QuizGroup {
         quiz.changeQuizGroup(this);
     }
 
-    //== 생성자 메서드 =//
+    //== 생성 메서드 =//
     public static QuizGroup createQuizGroup(UserEntity userEntity, String quizTitle, String quizGroupDescription, List<CreateQuizRequest> quizzes) {
         QuizGroup newQuizGroup = new QuizGroup(userEntity, quizTitle, quizGroupDescription);
 
@@ -86,6 +86,7 @@ public class QuizGroup {
         return newQuizGroup;
     }
 
+    //== 수정 메서드 ==//
     public void updateQuizGroup(String quizTitle, String quizGroupDescription) {
         this.changeQuizTitle(quizTitle);
         this.changeQuizGroupDescription(quizGroupDescription);

@@ -103,6 +103,7 @@ public class Quiz {
         return newQuiz;
     }
 
+    //== 수정 메서드 ==//
     public void updateQuiz(String question, String correctAnswer, String explanation, Integer quizScore) {
         this.changeQuestion(question);
         this.changeCorrectAnswer(correctAnswer);

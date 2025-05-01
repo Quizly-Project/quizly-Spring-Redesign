@@ -25,7 +25,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      * 최소의 경우 쿼리 3번으로 모든 데이터를 불러온다.
      */
     @Override
-    public List<QuizGroup> findQuizGroupByUserName(String name, int offset, int limit) {
+    public List<QuizGroup> getQuizGroupByUserName(String name, int offset, int limit) {
           return em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity " +
                         " where qg.userEntity.username =: username", QuizGroup.class)
@@ -36,7 +36,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
     }
 
     @Override
-    public List<QuizGroup> findQuizGroupAll(int offset, int limit) {
+    public List<QuizGroup> getQuizGroupAll(int offset, int limit) {
          return em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity ", QuizGroup.class)
                 .setFirstResult(offset)
@@ -51,7 +51,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      * 퀴즈 그룹 정보에 대하여 fetch join을 수행
      */
     @Override
-    public List<QuizGroup> findQuizGroupOne(Long quizGroupId) {
+    public List<QuizGroup> getQuizGroupOne(Long quizGroupId) {
         return em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity " +
                         " join fetch qg.quizzes " +
@@ -61,7 +61,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
     }
 
     @Override
-    public List<Quiz> findQuizOne(Long quizid) {
+    public List<Quiz> getQuizOne(Long quizid) {
         return em.createQuery("select q from Quiz q " +
                         " join fetch q.quizOptions " +
                         " where q.id =:quizId ")
@@ -70,7 +70,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
     }
 
     @Override
-    public QuizOption findQuizOptionOne(Long quizOptionId) {
+    public QuizOption getQuizOptionOne(Long quizOptionId) {
         return em.find(QuizOption.class, quizOptionId);
     }
 

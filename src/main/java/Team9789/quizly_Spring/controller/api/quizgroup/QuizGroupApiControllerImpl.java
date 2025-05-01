@@ -7,6 +7,8 @@ import Team9789.quizly_Spring.dto.request.quizgroup.CreateQuizGroupRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateQuizGroupRequest;
 import Team9789.quizly_Spring.service.quizgroup.QuizGroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +24,14 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 페이징 기능 추가되어 있음
      */
     @GetMapping("/api/v1/users/{username}/quizgroups")
-    public ResultDto<List<QuizGroupDto>> findQuizGroupByUsernameV1(
+    public ResponseEntity<ResultDto<List<QuizGroupDto>>> findQuizGroupByUsernameV1(
             @PathVariable("username") String username,
             @RequestParam("offset")  Integer offset,
             @RequestParam("limit") Integer limit
     ) {
         List<QuizGroupDto> quizGroups = quizGroupService.getQuizGroupByName(username, offset, limit);
 
-        return new ResultDto<List<QuizGroupDto>>("유저 이름으로 퀴즈 목록 조회", quizGroups);
+        return new ResponseEntity<ResultDto<List<QuizGroupDto>>>(new ResultDto<>("유저 이름으로 퀴즈 목록 조회",quizGroups), HttpStatus.OK);
     }
 
     /**
@@ -37,12 +39,12 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 페이지 기능 추가되어 있음
      */
     @GetMapping("/api/v1/quizgroups")
-    public ResultDto<List<QuizGroupDto>> findQuizGroupAllV1(
+    public ResponseEntity<ResultDto<List<QuizGroupDto>>> findQuizGroupAllV1(
             @RequestParam("offset")  Integer offset,
             @RequestParam("limit") Integer limit
     ) {
         List<QuizGroupDto> quizGroups = quizGroupService.getQuizGroupAll(offset, limit);
-        return new ResultDto<List<QuizGroupDto>>("모든 퀴즈 목록 조회", quizGroups);
+        return new ResponseEntity<ResultDto<List<QuizGroupDto>>>(new ResultDto<>("모든 퀴즈 목록 조회",quizGroups), HttpStatus.OK);
     }
 
     /**
@@ -50,9 +52,9 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 퀴즈 그룹 아이디를 이용해서 퀴즈 그룹 조회
      */
     @GetMapping("/api/v1/quizgroups/{quizgroupId}")
-    public ResultDto<QuizGroupDto> findQuizGroupOneV1(@PathVariable("quizgroupId") Long quizgroupId) {
+    public ResponseEntity<ResultDto<QuizGroupDto>> findQuizGroupOneV1(@PathVariable("quizgroupId") Long quizgroupId) {
         QuizGroupDto quizGroupDto = quizGroupService.getQuizGroupOne(quizgroupId);
-        return new ResultDto<QuizGroupDto>("특정 퀴즈 그룹 하나 조회", quizGroupDto);
+        return new ResponseEntity<ResultDto<QuizGroupDto>>(new ResultDto<>("특정 퀴즈 그룹 조회", quizGroupDto), HttpStatus.OK);
     }
 
     /**
@@ -60,12 +62,12 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 등록된 퀴즈 그룹 ID 반환
      */
     @PostMapping("/api/v1/quizgroups")
-    public ResultDto<Long> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request) {
+    public ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
         Long savedId = quizGroupService.saveQuizGroup(userDto ,request);
-        return new ResultDto<Long>("퀴즈 그룹 추가", savedId);
+        return new ResponseEntity<ResultDto<Long>>(new ResultDto<>("퀴즈 그룹 등록", savedId), HttpStatus.OK);
     }
 
     /**
@@ -73,12 +75,12 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 수정된 퀴즈 그룹 ID 반환
      */
     @PutMapping("/api/v1/quizgroups/{quizgroupId}")
-    public ResultDto<Long> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request) {
+    public ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
         Long updatedId = quizGroupService.updateQuizGroup(userDto, request);
-        return new ResultDto<Long>("퀴즈 그룹 수정", updatedId);
+        return new ResponseEntity<ResultDto<Long>>(new ResultDto<>("퀴즈 그룹 수정", updatedId), HttpStatus.OK);
     }
 
     /**
@@ -86,13 +88,13 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 삭제된 퀴즈 그룹 ID 반환
      */
     @DeleteMapping("/api/v1/quizgroups/{quizgroupId}")
-    public ResultDto<Long> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId) {
+    public ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
 
         Long removeId = quizGroupService.removeQuizGroup(userDto, quizgroupId);
-        return new ResultDto<Long>("퀴즈 그룹을 삭제합니다.", removeId);
+        return new ResponseEntity<ResultDto<Long>>(new ResultDto<>("퀴즈 그룹 삭제", removeId), HttpStatus.OK);
     }
 
     // 임시 유저 데이터 사용
