@@ -37,10 +37,15 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
 
     @Override
     public List<QuizGroup> getQuizGroupAll(int offset, int limit) {
-         return em.createQuery("select qg from QuizGroup qg " +
-                        " join fetch qg.userEntity ", QuizGroup.class)
+        List<Long> ids = em.createQuery("select qg.id from QuizGroup qg ", Long.class)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
+                .getResultList();
+
+        return em.createQuery("select qg from QuizGroup qg " +
+                        " join fetch qg.userEntity " +
+                        " where qg.id in :ids", QuizGroup.class)
+                .setParameter("ids", ids)
                 .getResultList();
     }
     //== API Query ==//
