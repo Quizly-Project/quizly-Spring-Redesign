@@ -24,7 +24,7 @@ public class QuizResultRepositoryImpl implements QuizResultRepository {
     public List<QuizResult> getQuizResult(String roomCode) {
         return em.createQuery("select qr from QuizResult qr " +
                         " join fetch qr.userEntity " +
-                        " join fetch qr.studentResult " +
+                        " join fetch qr.studentResults " +
                         " where qr.roomCode =:roomCode", QuizResult.class)
                 .setParameter("roomCode", roomCode)
                 .getResultList();
