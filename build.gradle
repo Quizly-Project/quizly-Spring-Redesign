@@ -43,8 +43,8 @@ dependencies {
 //	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 //	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	// 개발을 위해 h2 데이터베이스 사용
-	runtimeOnly 'com.h2database:h2'
+//	// 개발을 위해 h2 데이터베이스 사용
+//	runtimeOnly 'com.h2database:h2'
 
 	// https://mvnrepository.com/artifact/com.querydsl/querydsl-sql-spring
 	implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: '5.0.0'
@@ -80,6 +80,9 @@ dependencies {
 
 	// redis 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// MySQL JDBC 드라이버 (JDBC connector)
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 }
 
