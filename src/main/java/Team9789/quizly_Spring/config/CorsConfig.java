@@ -14,7 +14,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true); // 쿠키 허용
-        config.addAllowedOrigin("http://localhost:3000"); // localhost:3000 요청 허용
+        config.addAllowedOrigin("http://localhost:3000"); // FIXME 나중에 프론트 주소에 맞게 수정 필요.
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 

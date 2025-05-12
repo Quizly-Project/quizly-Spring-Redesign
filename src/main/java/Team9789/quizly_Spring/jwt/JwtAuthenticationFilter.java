@@ -37,41 +37,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if(accessToken == null || accessToken.isBlank()){
+        if(existAccessToken(accessToken)){
             log.info("accessToken 없음");
             respondInvalidToken(response);
             return;
         }
 
         String userId = jwtProvider.getUserId(accessToken);
-        String accessUUID = jwtProvider.getAccessTokenUUID(accessToken);
-        Optional<String> resultAccess = tokenService.findAccessUUID(userId, accessUUID);
 
         TokenStatus tokenStatus = jwtProvider.validateToken(accessToken);
         log.info("사용자가 헤더에 전송한 accessToken 토큰 :" + accessToken);
 
-        if (tokenStatus == TokenStatus.VALID && !resultAccess.isEmpty()) {
+        if (tokenStatus == TokenStatus.VALID) {
             log.info("토큰 유효");
-            Authentication authentication = jwtProvider.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            setAuthentication(accessToken);
 
-        } else if (tokenStatus == TokenStatus.EXPIRED && !resultAccess.isEmpty()) {
+        } else if (tokenStatus == TokenStatus.EXPIRED) {
             log.info("토큰 기간 만료");
             String refreshToken = extractRefreshToken(request);
-            String refreshUUID = jwtProvider.getRefreshUUID(accessToken);
 
-            Optional<String> resultRefresh = tokenService.findRefreshToken(userId, refreshUUID);
+            Optional<String> findRefreshToken = tokenService.findRefreshToken(userId, refreshToken);
             log.info("사용자가 쿠키에 전송한 RefreshToken: " + refreshToken);
 
-            if (refreshToken != null && !resultRefresh.isEmpty()) {
+            if (exist(refreshToken) && exist(findRefreshToken)) {
                 List<String> roles = jwtProvider.getRoles(accessToken);
                 String nickName = jwtProvider.getNickName(accessToken);
 
-                accessToken = jwtProvider.createAccessToken(userId, roles, nickName, refreshUUID);
+                accessToken = jwtProvider.createAccessToken(userId, roles, nickName);
                 log.info("재발급한 AccessToken: " + accessToken);
 
-                Authentication authentication = jwtProvider.getAuthentication(accessToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                setAuthentication(accessToken);
 
                 response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
@@ -87,6 +82,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         filterChain.doFilter(request, response);
+    }
+
+    private static boolean existAccessToken(String accessToken) {
+        return accessToken == null || accessToken.isBlank();
+    }
+
+    private static boolean exist(String refreshToken) {
+        return refreshToken != null;
+    }
+
+    private static boolean exist(Optional<String> findRefreshToken) {
+        return !findRefreshToken.isEmpty();
+    }
+
+    private void setAuthentication(String accessToken) {
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private static void respondInvalidToken(HttpServletResponse response) throws IOException {

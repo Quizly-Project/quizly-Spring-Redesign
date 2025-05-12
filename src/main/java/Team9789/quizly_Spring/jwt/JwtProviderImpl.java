@@ -38,17 +38,11 @@ public class JwtProviderImpl implements JwtProvider {
     private long accessTokenValidity;
 
     @Override
-    public String createAccessToken(String userId, List<String> roles, String nickName, String refreshUUID) {
-        String accessUUID = UUID.randomUUID().toString();
+    public String createAccessToken(String userId, List<String> roles, String nickName) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("roles", roles);
         // FIXME 카카오톡 이름 그대로 노출되므로 변경 필요 (개인정보보호)
         claims.put("nickname", nickName);
-        claims.put("refresh_uuid", refreshUUID);
-        claims.put("access_uuid", accessUUID);
-
-        tokenService.deleteAccessUUID(userId);
-        tokenService.saveAccessUUID(userId, accessUUID);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -59,10 +53,10 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     @Override
-    public String createRefreshToken(String userId, String uuid) {
+    public String createRefreshToken(String userId) {
         // 오페이크 토큰 생성
         String refreshToken = refreshTokenGenerator.createOpaqueToken();
-        tokenService.saveRefreshToken(CreateRefreshToken.create(userId, refreshToken, uuid));
+        tokenService.saveRefreshToken(CreateRefreshToken.create(userId, refreshToken));
         return refreshToken;
     }
 
@@ -85,18 +79,6 @@ public class JwtProviderImpl implements JwtProvider {
     public String getUserId(String token) {
         return getClaims(token)
                 .getSubject();
-    }
-
-    @Override
-    public String getRefreshUUID(String token) {
-        return getClaims(token)
-                .get("refresh_uuid", String.class);
-    }
-
-    @Override
-    public String getAccessTokenUUID(String token) {
-        return getClaims(token)
-                .get("access_uuid", String.class);
     }
 
     @Override

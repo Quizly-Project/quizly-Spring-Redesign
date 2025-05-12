@@ -19,17 +19,17 @@ public class TokenServiceImpl implements TokenService {
     private final TokenRepository tokenRepository;
 
     @Override
-    public Optional<String> findRefreshToken(String userId, String uuid) {
+    public Optional<String> findRefreshToken(String userId, String refreshToken) {
 
-        Optional<String> findUUID = tokenRepository.findRefreshUUIDByUserId(userId);
+        Optional<String> findRefreshToken = tokenRepository.findRefreshByUserId(userId);
 
-        // UUID가 없거나 일치하지 않는 경우
-        if (findUUID.isEmpty() || !uuid.equals(findUUID.get())) {
-            log.info("refreshUUID가 없거나 refreshUUID가 일치하지 않습니다.");
+        // RefreshToken이 없거나 일치하지 않는 경우
+        if (findRefreshToken.isEmpty() || notEqualsRefreshToken(refreshToken, findRefreshToken)) {
+            log.info("RefreshToken이 없거나 일치하지 않습니다.");
             return Optional.empty();
         }
 
-        return tokenRepository.findRefreshByUUID(findUUID.get());
+        return findRefreshToken;
     }
 
     @Override
@@ -39,32 +39,17 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void deleteRefreshTokenAndUUID(String userId) {
-        Optional<String> findUUID = tokenRepository.findRefreshUUIDByUserId(userId);
-        if (!findUUID.isEmpty()) {
-            tokenRepository.deleteRefreshToken(findUUID.get());
+    public void deleteRefreshToken(String userId) {
+        Optional<String> findRefreshToken = tokenRepository.findRefreshByUserId(userId);
+        if (findRefreshToken.isEmpty()) {
+            return;
         }
-        tokenRepository.deleteRefreshUUID(userId);
+        tokenRepository.deleteRefreshToken(userId);
+
     }
 
-    @Override
-    public Optional<String> findAccessUUID(String userId, String uuid) {
-
-        Optional<String> findUUID = tokenRepository.findAccessUUIDByUserId(userId);
-        if (findUUID.isEmpty() || !uuid.equals(findUUID.get())) {
-            log.info("accessUUID가 없거나 accessUUID가 일치하지 않습니다.");
-            return Optional.empty();
-        }
-        return findUUID;
+    private static boolean notEqualsRefreshToken(String refreshToken, Optional<String> findRefreshToken) {
+        return !refreshToken.equals(findRefreshToken.get());
     }
 
-    @Override
-    public void saveAccessUUID(String userId, String uuid) {
-        tokenRepository.saveAccessUUID(userId, uuid);
-    }
-
-    @Override
-    public void deleteAccessUUID(String userId) {
-        tokenRepository.deleteAccessUUID(userId);
-    }
 }

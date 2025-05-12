@@ -42,19 +42,16 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         List<String> roles = authorities.stream()
                 .map(authority -> authority.toString())
                 .collect(Collectors.toList());
-        
-        String refreshUUID = UUID.randomUUID().toString();
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         if(userEntity.isEmpty()) throw new NotFindUserException();
 
         String userId = String.valueOf(userEntity.get().getId());
-        
-        tokenService.deleteRefreshTokenAndUUID(userId);
-        tokenService.deleteAccessUUID(userId);
 
-        String accessToken = jwtProvider.createAccessToken(userId, roles, username, refreshUUID);
-        String refreshToken = jwtProvider.createRefreshToken(userId, refreshUUID);
+        tokenService.deleteRefreshToken(userId);
+
+        String accessToken = jwtProvider.createAccessToken(userId, roles, username);
+        String refreshToken = jwtProvider.createRefreshToken(userId);
 
         log.info("로그인 AccessToken 발급: "+ accessToken);
         log.info("로그인 RefreshToken 발급: "+ refreshToken);
