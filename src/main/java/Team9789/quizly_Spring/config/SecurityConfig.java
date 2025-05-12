@@ -1,7 +1,6 @@
 package Team9789.quizly_Spring.config;
 
 import Team9789.quizly_Spring.Login.LoginFilter;
-import Team9789.quizly_Spring.jwt.CustomSuccessHandler;
 import Team9789.quizly_Spring.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +51,6 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable()) // HTTP 기본 인증 방식 비활성화
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }
