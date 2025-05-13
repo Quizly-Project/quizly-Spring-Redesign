@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class QuizOption {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "option_id")
     private Long id;
 

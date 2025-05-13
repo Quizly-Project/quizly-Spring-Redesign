@@ -18,7 +18,7 @@ import java.util.List;
 public class Quiz {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id")
     private Long id;
 
@@ -44,7 +44,6 @@ public class Quiz {
     @Column(name = "reg_date")
     private LocalDateTime regDate;
 
-    @BatchSize(size = 100)
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizOption> quizOptions = new ArrayList<>();
 

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class QuizGroup {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_group_id")
     private Long id;
 
@@ -35,11 +36,17 @@ public class QuizGroup {
     @Column(name="quiz_group_description")
     private String quizGroupDescription;
 
+    @Column(name = "reg_date")
+    private LocalDateTime regDate;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "category_id")
+//    private Category category;
+
 //    @Enumerated(EnumType.STRING)
 //    private QuizType quizType;
 
     // 퀴즈 목록
-    @BatchSize(size = 100)
     @OneToMany(mappedBy = "quizGroup", cascade = CascadeType.ALL)
     private List<Quiz> quizzes = new ArrayList<>();
 
@@ -48,6 +55,7 @@ public class QuizGroup {
         this.userEntity = userEntity;
         this.quizTitle = quizTitle;
         this.quizGroupDescription = quizGroupDescription;
+        this.regDate = LocalDateTime.now();
     }
 
     // 변경 메서드
@@ -58,7 +66,6 @@ public class QuizGroup {
     protected void changeQuizGroupDescription(String quizGroupDescription) {
         this.quizGroupDescription = quizGroupDescription;
     }
-
 
     //== 연관관계 편의 메서드 ==//
     // 퀴즈에 QuizGroup을 넣어야 한다.

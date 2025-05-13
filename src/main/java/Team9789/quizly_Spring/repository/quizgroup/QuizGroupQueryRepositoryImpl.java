@@ -26,13 +26,30 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      */
     @Override
     public List<QuizGroup> getQuizGroupByUserName(String name, int offset, int limit) {
-          return em.createQuery("select qg from QuizGroup qg " +
-                        " join fetch qg.userEntity " +
-                        " where qg.userEntity.username =: username", QuizGroup.class)
+        int userId = em.createQuery("select ue.id from UserEntity ue " +
+                        " where ue.username =: username ", Integer.class)
                 .setParameter("username", name)
+                .getResultList()
+                .getFirst();
+
+        return em.createQuery("select qg from QuizGroup qg " +
+                        " where qg.userEntity.id =: userId " +
+                        " order by qg.regDate DESC", QuizGroup.class)
+                .setParameter("userId", userId)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
                 .getResultList();
+
+
+
+
+//        return em.createQuery("select qg from QuizGroup qg " +
+//                        " where qg.userEntity.username =: username " +
+//                          "order by qg.regDate DESC ", QuizGroup.class)
+//                .setParameter("username", name)
+//                .setFirstResult(offset)
+//                .setMaxResults(limit)
+//                .getResultList();
     }
 
     @Override
