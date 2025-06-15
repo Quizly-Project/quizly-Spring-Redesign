@@ -62,7 +62,7 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 등록된 퀴즈 그룹 ID 반환
      */
     @PostMapping("/api/v1/quizgroups")
-    public ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request) {
+    public ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestBody CreateQuizGroupRequest request) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
@@ -75,7 +75,7 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
      * 수정된 퀴즈 그룹 ID 반환
      */
     @PutMapping("/api/v1/quizgroups/{quizgroupId}")
-    public ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request) {
+    public ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestBody UpdateQuizGroupRequest request) {
         // TODO: JWT에서 값을 꺼내오는 작업 해야 함
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
