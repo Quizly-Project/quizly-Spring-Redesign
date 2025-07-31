@@ -4,11 +4,9 @@ import Team9789.quizly_Spring.dto.quiz.QuizGroupDto;
 import Team9789.quizly_Spring.dto.ResultDto;
 import Team9789.quizly_Spring.dto.request.quizgroup.CreateQuizGroupRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateQuizGroupRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,9 +27,9 @@ public interface QuizGroupApiController {
 
     ResponseEntity<ResultDto<QuizGroupDto>> findQuizGroupOneV1(@PathVariable("quizgroupId") Long quizgroupId);
 
-    ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request);
+    ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
-    ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request);
+    ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 
-    ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId);
+    ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
 }
