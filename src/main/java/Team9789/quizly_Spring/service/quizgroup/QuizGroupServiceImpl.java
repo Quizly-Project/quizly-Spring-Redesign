@@ -43,7 +43,7 @@ public class QuizGroupServiceImpl implements QuizGroupService {
     }
 
     @Override
-    public QuizGroupDto getQuizGroupOneById(Long quizGroupId) throws NotFoundQuizGroupException {
+    public QuizGroupDto getQuizGroupOneById(Long quizGroupId) throws NotFoundResourceException {
         Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(quizGroupId);
         QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
 
@@ -52,7 +52,7 @@ public class QuizGroupServiceImpl implements QuizGroupService {
 
     @Override
     @Transactional
-    public Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest createQuizGroupData) throws NotFoundUserException {
+    public Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest createQuizGroupData) throws NotFoundResourceException {
         Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
         UserEntity user = userOptional.orElseThrow(NotFoundUserException::new);
 
@@ -63,7 +63,7 @@ public class QuizGroupServiceImpl implements QuizGroupService {
 
     @Override
     @Transactional
-    public Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest updateQuizGroupData) throws ResourceOwnerMismatchException {
+    public Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest updateQuizGroupData) throws NotFoundResourceException, ResourceOwnerMismatchException {
         Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(updateQuizGroupData.getQuizGroupId());
         QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
 
@@ -78,7 +78,7 @@ public class QuizGroupServiceImpl implements QuizGroupService {
 
     @Override
     @Transactional
-    public void removeQuizGroup(UserDto userDto, Long quizGroupId) throws NotFoundQuizGroupException {
+    public void removeQuizGroup(UserDto userDto, Long quizGroupId) throws NotFoundResourceException, ResourceOwnerMismatchException {
         Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(quizGroupId);
 
         QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
@@ -96,7 +96,7 @@ public class QuizGroupServiceImpl implements QuizGroupService {
                 .toList();
     }
 
-    private void updateQuizzesFrom(UpdateQuizGroupRequest updateData) throws NotFoundQuizException,  NotFoundQuizOptionException {
+    private void updateQuizzesFrom(UpdateQuizGroupRequest updateData) throws NotFoundResourceException {
         for (UpdateQuizRequest quiz : updateData.getQuizzes()) {
             Optional<Quiz> quizOptional = quizGroupQueryRepository.getQuizOne(quiz.getQuizId());
 
