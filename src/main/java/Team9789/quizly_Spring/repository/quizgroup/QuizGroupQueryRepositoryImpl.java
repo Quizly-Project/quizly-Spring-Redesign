@@ -26,7 +26,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      * 최소의 경우 쿼리 3번으로 모든 데이터를 불러온다.
      */
     @Override
-    public List<QuizGroup> getQuizGroupAllBy(String name, int offset, int limit) {
+    public List<QuizGroup> getQuizGroupAllByUserName(String name, int offset, int limit) {
           return em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity " +
                         " where qg.userEntity.username =: username", QuizGroup.class)

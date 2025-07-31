@@ -22,9 +22,8 @@ public class QuizGroupCommandRepositoryImpl implements QuizGroupCommandRepositor
 
     // 퀴즈 그룹 삭제
     @Override
-    public Long removeQuizGroup(QuizGroup quizGroup) {
+    public void removeQuizGroup(QuizGroup quizGroup) {
         em.remove(quizGroup);
-        return quizGroup.getId();
     }
 
     //== Business Query ==//

@@ -13,7 +13,7 @@ public interface QuizGroupQueryRepository {
 
     //== API Query ==//
 
-    List<QuizGroup> getQuizGroupAllBy(String name, int offset, int limit);
+    List<QuizGroup> getQuizGroupAllByUserName(String name, int offset, int limit);
 
     List<QuizGroup> getQuizGroupAll(int offset, int limit);
 

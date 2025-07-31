@@ -10,7 +10,7 @@ public interface QuizGroupCommandRepository {
 
     Long saveQuizGroup(QuizGroup quizGroup);
 
-    Long removeQuizGroup(QuizGroup quizGroup);
+    void removeQuizGroup(QuizGroup quizGroup);
 
     //== Business Query ==//
 }

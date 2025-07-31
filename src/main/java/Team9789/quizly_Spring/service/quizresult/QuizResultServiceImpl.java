@@ -6,9 +6,9 @@ import Team9789.quizly_Spring.dto.request.quizresult.CreateQuizResultRequest;
 import Team9789.quizly_Spring.entity.QuizGroup;
 import Team9789.quizly_Spring.entity.QuizResult;
 import Team9789.quizly_Spring.entity.UserEntity;
-import Team9789.quizly_Spring.exception.NotFindQuizGroupException;
-import Team9789.quizly_Spring.exception.NotFindQuizResultException;
-import Team9789.quizly_Spring.exception.NotFindUserException;
+import Team9789.quizly_Spring.exception.NotFoundQuizGroupException;
+import Team9789.quizly_Spring.exception.NotFoundQuizResultException;
+import Team9789.quizly_Spring.exception.NotFoundUserException;
 import Team9789.quizly_Spring.repository.login.UserRepository;
 import Team9789.quizly_Spring.repository.quizgroup.QuizGroupQueryRepository;
 import Team9789.quizly_Spring.repository.quizresult.QuizResultRepository;
@@ -37,15 +37,18 @@ public class QuizResultServiceImpl implements QuizResultService {
     @Override
     @Transactional
     public String saveQuizResult(UserDto userDto, CreateQuizResultRequest request) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(userDto.getUsername());
+        Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
+        UserEntity user = userOptional.orElseThrow(NotFoundUserException::new);
 
-        if (userEntity.isEmpty()) throw new NotFindUserException();
-
-        QuizGroup quizGroup = quizGroupQueryRepository.getQuizGroupOne(request.getQuizGroupId())
-                .stream().findFirst().orElseThrow(()-> new NotFindQuizGroupException());
+        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(request.getQuizGroupId());
+        QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
 
         QuizResult quizResult = QuizResult.createQuizResult(
-                userEntity.get(), quizGroup, request.getRoomCode(), request.getStudentResults());
+                user,
+                quizGroup,
+                request.getRoomCode(),
+                request.getStudentResults()
+        );
 
         return quizResultRepository.saveQuizResult(quizResult);
     }
@@ -56,8 +59,9 @@ public class QuizResultServiceImpl implements QuizResultService {
      */
     @Override
     public QuizResultDto getQuizResult(String roomCode) {
-        QuizResult quizResult = quizResultRepository.getQuizResult(roomCode)
-                .stream().findFirst().orElseThrow(() -> new NotFindQuizResultException());
+        Optional<QuizResult> quizResultOptional = quizResultRepository.getQuizResult(roomCode);
+        QuizResult quizResult = quizResultOptional.orElseThrow(NotFoundQuizResultException::new);
+
         return new QuizResultDto(quizResult);
     }
 }

@@ -11,15 +11,15 @@ import java.util.List;
 @Service
 public interface QuizGroupService {
 
-    List<QuizGroupDto> getQuizGroupByName(String username, int offset, int limit);
+    List<QuizGroupDto> getQuizGroupAllByUserName(String username, int offset, int limit);
 
     List<QuizGroupDto> getQuizGroupAll(int offset, int limit);
 
-    QuizGroupDto getQuizGroupOne(Long quizGroupId);
+    QuizGroupDto getQuizGroupOneById(Long quizGroupId);
 
     Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest request) ;
 
     Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest request);
 
-    Long removeQuizGroup(UserDto userDto, Long quizGroupId);
+    void removeQuizGroup(UserDto userDto, Long quizGroupId);
 }
