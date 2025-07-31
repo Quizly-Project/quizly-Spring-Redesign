@@ -17,9 +17,9 @@ public interface QuizGroupService {
 
     QuizGroupDto getQuizGroupOneById(Long quizGroupId);
 
-    Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest request) ;
+    Long saveQuizGroup(int userId, CreateQuizGroupRequest request) ;
 
-    Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest request);
+    Long updateQuizGroup(int userId, UpdateQuizGroupRequest request);
 
-    void removeQuizGroup(UserDto userDto, Long quizGroupId);
+    void removeQuizGroup(int userId, Long quizGroupId);
 }

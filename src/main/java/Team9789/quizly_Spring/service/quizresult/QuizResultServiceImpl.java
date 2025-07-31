@@ -28,20 +28,11 @@ public class QuizResultServiceImpl implements QuizResultService {
     private final UserRepository userRepository;
     private final QuizGroupQueryRepository quizGroupQueryRepository;
 
-    /**
-     * 퀴즈 결과 저장
-     * 결과를 저장할 사용자가 없다면 NotFindUserException 예외 발생
-     * 관련된 퀴즈가 없다면, NotFindQuizGroupException 예외 발생
-     * 문제 없으면 퀴즈 결과를 저장
-     */
     @Override
     @Transactional
     public String saveQuizResult(UserDto userDto, CreateQuizResultRequest request) {
-        Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
-        UserEntity user = userOptional.orElseThrow(NotFoundUserException::new);
-
-        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(request.getQuizGroupId());
-        QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
+        UserEntity user = getUserEntity(userDto);
+        QuizGroup quizGroup = getQuizGroup(request);
 
         QuizResult quizResult = QuizResult.createQuizResult(
                 user,
@@ -53,15 +44,25 @@ public class QuizResultServiceImpl implements QuizResultService {
         return quizResultRepository.saveQuizResult(quizResult);
     }
 
-    /**
-     * 퀴즈 결과 가져오기
-     * 퀴즈 결과가 있으면 결과를 반환, 없으면 NotFindQuizResult() 예외 발생
-     */
     @Override
     public QuizResultDto getQuizResult(String roomCode) {
-        Optional<QuizResult> quizResultOptional = quizResultRepository.getQuizResult(roomCode);
-        QuizResult quizResult = quizResultOptional.orElseThrow(NotFoundQuizResultException::new);
+        QuizResult quizResult = getResult(roomCode);
 
         return new QuizResultDto(quizResult);
+    }
+
+    private QuizGroup getQuizGroup(CreateQuizResultRequest request) {
+        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(request.getQuizGroupId());
+        return quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
+    }
+
+    private UserEntity getUserEntity(UserDto userDto) {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
+        return userOptional.orElseThrow(NotFoundUserException::new);
+    }
+
+    private QuizResult getResult(String roomCode) {
+        Optional<QuizResult> quizResultOptional = quizResultRepository.getQuizResult(roomCode);
+        return quizResultOptional.orElseThrow(NotFoundQuizResultException::new);
     }
 }

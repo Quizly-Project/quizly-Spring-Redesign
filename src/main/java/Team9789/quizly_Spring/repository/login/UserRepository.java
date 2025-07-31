@@ -8,5 +8,7 @@ public interface UserRepository {
 
     Optional<UserEntity> findByUsername(String username);
 
+    Optional<UserEntity> findByUserId(int userId);
+
     void save(UserEntity userEntity);
 }

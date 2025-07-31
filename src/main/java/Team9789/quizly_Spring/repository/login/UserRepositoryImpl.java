@@ -26,6 +26,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<UserEntity> findByUserId(int userId) {
+        return em.createQuery(" select ue from UserEntity ue " +
+                        " where ue.id = :userId ", UserEntity.class)
+                .setParameter("userId", userId)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
+
+    @Override
     public void save(UserEntity userEntity) {
         em.persist(userEntity);
     }

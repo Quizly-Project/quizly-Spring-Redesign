@@ -2,7 +2,6 @@ package Team9789.quizly_Spring.service.quizgroup;
 
 import Team9789.quizly_Spring.exception.*;
 import Team9789.quizly_Spring.dto.quiz.QuizGroupDto;
-import Team9789.quizly_Spring.dto.user.UserDto;
 import Team9789.quizly_Spring.dto.request.quizgroup.CreateQuizGroupRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateOptionRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateQuizGroupRequest;
@@ -44,18 +43,14 @@ public class QuizGroupServiceImpl implements QuizGroupService {
 
     @Override
     public QuizGroupDto getQuizGroupOneById(Long quizGroupId) throws NotFoundResourceException {
-        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(quizGroupId);
-        QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
-
+        QuizGroup quizGroup = getQuizGroup(quizGroupId);
         return new QuizGroupDto(quizGroup);
     }
 
     @Override
     @Transactional
-    public Long saveQuizGroup(UserDto userDto, CreateQuizGroupRequest createQuizGroupData) throws NotFoundResourceException {
-        Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
-        UserEntity user = userOptional.orElseThrow(NotFoundUserException::new);
-
+    public Long saveQuizGroup(int userId, CreateQuizGroupRequest createQuizGroupData) throws NotFoundResourceException {
+        UserEntity user = getUserEntity(userId);
         QuizGroup quizGroups = QuizGroup.createQuizGroup(user, createQuizGroupData.getQuizTitle(), createQuizGroupData.getQuizGroupDescription(), createQuizGroupData.getQuizzes());
 
         return quizGroupCommandRepository.saveQuizGroup(quizGroups);
@@ -63,27 +58,22 @@ public class QuizGroupServiceImpl implements QuizGroupService {
 
     @Override
     @Transactional
-    public Long updateQuizGroup(UserDto userDto, UpdateQuizGroupRequest updateQuizGroupData) throws NotFoundResourceException, ResourceOwnerMismatchException {
-        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(updateQuizGroupData.getQuizGroupId());
-        QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
+    public Long updateQuizGroup(int userId, UpdateQuizGroupRequest updateQuizGroupData) throws NotFoundResourceException, ResourceOwnerMismatchException {
+        QuizGroup quizGroup = getQuizGroup(updateQuizGroupData.getQuizGroupId());
 
-        if (quizGroup.isNotOwner(userDto.getUserId())) throw new ResourceOwnerMismatchException("수정자와 리소스 작성자가 다릅니다.");
+        if (quizGroup.isNotOwner(userId)) throw new ResourceOwnerMismatchException("수정자와 리소스 작성자가 다릅니다.");
 
-        quizGroup.updateQuizGroup(updateQuizGroupData.getQuizTitle(), updateQuizGroupData.getQuizGroupDescription());
-
-        updateQuizzesFrom(updateQuizGroupData);
+        quizGroupUpdate(updateQuizGroupData, quizGroup);
 
         return quizGroup.getId();
     }
 
     @Override
     @Transactional
-    public void removeQuizGroup(UserDto userDto, Long quizGroupId) throws NotFoundResourceException, ResourceOwnerMismatchException {
-        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(quizGroupId);
+    public void removeQuizGroup(int userId, Long quizGroupId) throws NotFoundResourceException, ResourceOwnerMismatchException {
+        QuizGroup quizGroup = getQuizGroup(quizGroupId);
 
-        QuizGroup quizGroup = quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
-
-        if (quizGroup.isNotOwner(userDto.getUserId())) {
+        if (quizGroup.isNotOwner(userId)) {
             throw new ResourceOwnerMismatchException("수정자와 리소스 작성자가 다릅니다.");
         }
 
@@ -96,7 +86,18 @@ public class QuizGroupServiceImpl implements QuizGroupService {
                 .toList();
     }
 
-    private void updateQuizzesFrom(UpdateQuizGroupRequest updateData) throws NotFoundResourceException {
+    private QuizGroup getQuizGroup(Long quizGroupId) {
+        Optional<QuizGroup> quizGroupOptional = quizGroupQueryRepository.getQuizGroupOne(quizGroupId);
+        return quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
+    }
+
+    private UserEntity getUserEntity(int userId) {
+        Optional<UserEntity> userOptional = userRepository.findByUserId(userId);
+        return userOptional.orElseThrow(NotFoundUserException::new);
+    }
+
+    private void quizGroupUpdate(UpdateQuizGroupRequest updateData, QuizGroup quizGroup) {
+        quizGroup.updateQuizGroup(updateData.getQuizTitle(), updateData.getQuizGroupDescription());
         for (UpdateQuizRequest quiz : updateData.getQuizzes()) {
             Optional<Quiz> quizOptional = quizGroupQueryRepository.getQuizOne(quiz.getQuizId());
 
