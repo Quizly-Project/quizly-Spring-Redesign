@@ -1,8 +1,8 @@
 package Team9789.quizly_Spring.exception;
 
-public class NotFoundQuizException extends RuntimeException{
+public class NotFoundQuizOptionException extends RuntimeException{
 
-    public NotFoundQuizException() {
-        super("퀴즈를 찾을 수 없습니다.");
+    public NotFoundQuizOptionException() {
+        super("퀴즈 옵션을 찾을 수 없습니다.");
     }
 }
