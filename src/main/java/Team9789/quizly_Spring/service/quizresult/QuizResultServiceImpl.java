@@ -1,7 +1,6 @@
 package Team9789.quizly_Spring.service.quizresult;
 
 import Team9789.quizly_Spring.dto.quiz.QuizResultDto;
-import Team9789.quizly_Spring.dto.user.UserDto;
 import Team9789.quizly_Spring.dto.request.quizresult.CreateQuizResultRequest;
 import Team9789.quizly_Spring.entity.QuizGroup;
 import Team9789.quizly_Spring.entity.QuizResult;
@@ -30,8 +29,8 @@ public class QuizResultServiceImpl implements QuizResultService {
 
     @Override
     @Transactional
-    public String saveQuizResult(UserDto userDto, CreateQuizResultRequest request) {
-        UserEntity user = getUserEntity(userDto);
+    public String saveQuizResult(int userId, CreateQuizResultRequest request) {
+        UserEntity user = getUserEntity(userId);
         QuizGroup quizGroup = getQuizGroup(request);
 
         QuizResult quizResult = QuizResult.createQuizResult(
@@ -56,8 +55,8 @@ public class QuizResultServiceImpl implements QuizResultService {
         return quizGroupOptional.orElseThrow(NotFoundQuizGroupException::new);
     }
 
-    private UserEntity getUserEntity(UserDto userDto) {
-        Optional<UserEntity> userOptional = userRepository.findByUsername(userDto.getUsername());
+    private UserEntity getUserEntity(int userId) {
+        Optional<UserEntity> userOptional = userRepository.findByUserId(userId);
         return userOptional.orElseThrow(NotFoundUserException::new);
     }
 
