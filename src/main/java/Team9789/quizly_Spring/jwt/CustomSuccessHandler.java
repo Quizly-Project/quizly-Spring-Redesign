@@ -1,7 +1,7 @@
 package Team9789.quizly_Spring.jwt;
 
 import Team9789.quizly_Spring.entity.UserEntity;
-import Team9789.quizly_Spring.exception.NotFindUserException;
+import Team9789.quizly_Spring.exception.NotFoundUserException;
 import Team9789.quizly_Spring.repository.login.UserRepository;
 import Team9789.quizly_Spring.service.token.TokenService;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,6 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -44,7 +43,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                 .collect(Collectors.toList());
 
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
-        if(userEntity.isEmpty()) throw new NotFindUserException();
+        if(userEntity.isEmpty()) throw new NotFoundUserException();
 
         String userId = String.valueOf(userEntity.get().getId());
 

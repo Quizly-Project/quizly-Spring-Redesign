@@ -93,8 +93,8 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController{
         // 임시로 데이터 사용
         UserDto userDto = createTemporaryUserEntity();
 
-        Long removeId = quizGroupService.removeQuizGroup(userDto, quizgroupId);
-        return new ResponseEntity<ResultDto<Long>>(new ResultDto<>("퀴즈 그룹 삭제", removeId), HttpStatus.OK);
+        quizGroupService.removeQuizGroup(userDto, quizgroupId);
+        return new ResponseEntity<ResultDto<Long>>(new ResultDto<>("퀴즈 그룹 삭제", 0L), HttpStatus.NO_CONTENT);
     }
 
     // 임시 유저 데이터 사용
