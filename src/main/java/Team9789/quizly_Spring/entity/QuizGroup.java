@@ -92,4 +92,11 @@ public class QuizGroup {
         this.changeQuizGroupDescription(quizGroupDescription);
     }
 
+    public boolean isEqualsUserId(int id) {
+        return this.userEntity.isEqualsId(id);
+    }
+
+    public boolean isNotOwner(int id) {
+        return !isEqualsUserId(id);
+    }
 }

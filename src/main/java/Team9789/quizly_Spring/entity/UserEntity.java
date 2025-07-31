@@ -49,4 +49,8 @@ public class UserEntity {
                 .credentialsNonExpired(true)
                 .build();
     }
+
+    public boolean isEqualsId(int id) {
+        return this.id == id;
+    }
 }
