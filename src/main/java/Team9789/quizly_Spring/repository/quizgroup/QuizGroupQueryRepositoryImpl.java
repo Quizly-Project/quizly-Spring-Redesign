@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      * 최소의 경우 쿼리 3번으로 모든 데이터를 불러온다.
      */
     @Override
-    public List<QuizGroup> getQuizGroupByUserName(String name, int offset, int limit) {
+    public List<QuizGroup> getQuizGroupAllBy(String name, int offset, int limit) {
           return em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity " +
                         " where qg.userEntity.username =: username", QuizGroup.class)
@@ -56,27 +57,32 @@ public class QuizGroupQueryRepositoryImpl implements QuizGroupQueryRepository{
      * 퀴즈 그룹 정보에 대하여 fetch join을 수행
      */
     @Override
-    public List<QuizGroup> getQuizGroupOne(Long quizGroupId) {
-        return em.createQuery("select qg from QuizGroup qg " +
+    public Optional<QuizGroup> getQuizGroupOne(Long quizGroupId) {
+        List<QuizGroup> result = em.createQuery("select qg from QuizGroup qg " +
                         " join fetch qg.userEntity " +
                         " join fetch qg.quizzes " +
                         " where qg.id =:quizGroupId ", QuizGroup.class)
                 .setParameter("quizGroupId", quizGroupId)
                 .getResultList();
+
+        return result.stream().findFirst();
     }
 
     @Override
-    public List<Quiz> getQuizOne(Long quizid) {
-        return em.createQuery("select q from Quiz q " +
+    public Optional<Quiz> getQuizOne(Long quizid) {
+        List<Quiz> result = em.createQuery("select q from Quiz q " +
                         " join fetch q.quizOptions " +
-                        " where q.id =:quizId ")
+                        " where q.id =:quizId ", Quiz.class)
                 .setParameter("quizId", quizid)
                 .getResultList();
+
+        return result.stream().findFirst();
     }
 
     @Override
-    public QuizOption getQuizOptionOne(Long quizOptionId) {
-        return em.find(QuizOption.class, quizOptionId);
+    public Optional<QuizOption> getQuizOptionOne(Long quizOptionId) {
+        QuizOption result = em.find(QuizOption.class, quizOptionId);
+        return Optional.of(result);
     }
 
     //== Business Query ==//

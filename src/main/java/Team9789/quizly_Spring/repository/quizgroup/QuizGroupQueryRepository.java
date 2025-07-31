@@ -6,13 +6,14 @@ import Team9789.quizly_Spring.entity.QuizGroup;
 import Team9789.quizly_Spring.entity.QuizOption;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuizGroupQueryRepository {
 
     //== API Query ==//
 
-    List<QuizGroup> getQuizGroupByUserName(String name, int offset, int limit);
+    List<QuizGroup> getQuizGroupAllBy(String name, int offset, int limit);
 
     List<QuizGroup> getQuizGroupAll(int offset, int limit);
 
@@ -21,11 +22,11 @@ public interface QuizGroupQueryRepository {
 
     //== Business Query ==//
 
-    List<QuizGroup> getQuizGroupOne(Long quizGroupId);
+    Optional<QuizGroup> getQuizGroupOne(Long quizGroupId);
 
-    List<Quiz> getQuizOne(Long quizId);
+    Optional<Quiz> getQuizOne(Long quizId);
 
-    QuizOption getQuizOptionOne(Long quizOptionId);
+    Optional<QuizOption> getQuizOptionOne(Long quizOptionId);
 
     //== Business Query ==//
 }

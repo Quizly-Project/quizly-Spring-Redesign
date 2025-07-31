@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,12 +22,14 @@ public class QuizResultRepositoryImpl implements QuizResultRepository {
     }
 
     @Override
-    public List<QuizResult> getQuizResult(String roomCode) {
-        return em.createQuery("select qr from QuizResult qr " +
+    public Optional<QuizResult> getQuizResult(String roomCode) {
+        List<QuizResult> result = em.createQuery("select qr from QuizResult qr " +
                         " join fetch qr.userEntity " +
                         " join fetch qr.studentResults " +
                         " where qr.roomCode =:roomCode", QuizResult.class)
                 .setParameter("roomCode", roomCode)
                 .getResultList();
+
+        return result.stream().findFirst();
     }
 }

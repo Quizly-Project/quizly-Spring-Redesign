@@ -5,11 +5,12 @@ import Team9789.quizly_Spring.entity.QuizResult;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuizResultRepository {
 
     String saveQuizResult(QuizResult quizResult);
 
-    List<QuizResult> getQuizResult(String roomCode);
+    Optional<QuizResult> getQuizResult(String roomCode);
 }
