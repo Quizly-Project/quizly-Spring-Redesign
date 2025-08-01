@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class JoinController {
             @ApiResponse(responseCode = "409", description = "이미 존재하는 사용자입니다. ")
     })
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody JoinDTO joinDTO) throws UserExistException {
+    public ResponseEntity<String> join(@Valid @RequestBody JoinDTO joinDTO) throws UserExistException {
 
         joinService.joinProcess(joinDTO);
         return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
