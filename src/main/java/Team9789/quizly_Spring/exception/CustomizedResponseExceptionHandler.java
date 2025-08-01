@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 @ControllerAdvice
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomizedResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 404 응답
     @ExceptionHandler(NotFoundResourceException.class)
@@ -43,10 +43,20 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // 403 - authorizationHeader에서 값을 꺼낼 때 문제 발생
+    @ExceptionHandler(InvalidAuthorizationHeaderException.class)
+    public final ResponseEntity<Object> handlerInvalidAuthorizationHeaderException(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.of(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+    }
+
     // Validation 검증 예외 발생시
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ExceptionResponse exceptionResponse = ExceptionResponse.of(new Date(), ex.getMessage(), ex.getBindingResult().toString());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+
+
 }
