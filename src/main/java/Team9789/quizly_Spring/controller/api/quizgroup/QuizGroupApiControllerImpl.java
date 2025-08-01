@@ -4,6 +4,7 @@ import Team9789.quizly_Spring.dto.quiz.QuizGroupDto;
 import Team9789.quizly_Spring.dto.ResultDto;
 import Team9789.quizly_Spring.dto.request.quizgroup.CreateQuizGroupRequest;
 import Team9789.quizly_Spring.dto.request.quizgroup.UpdateQuizGroupRequest;
+import Team9789.quizly_Spring.exception.InvalidAuthorizationHeaderException;
 import Team9789.quizly_Spring.jwt.JwtProvider;
 import Team9789.quizly_Spring.service.quizgroup.QuizGroupService;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +54,8 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController {
     public ResponseEntity<ResultDto<Long>> addQuizGroupV1(
             @RequestBody CreateQuizGroupRequest request,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
-    ) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>(new ResultDto<>("인증 실패", -1L), HttpStatus.UNAUTHORIZED);
-        }
-        String accessToken = authorizationHeader.substring(7);
-        int userId = Integer.parseInt(jwtProvider.getUserId(accessToken));
+    ) throws InvalidAuthorizationHeaderException {
+        int userId = getUserIdFrom(authorizationHeader);
 
         Long savedId = quizGroupService.saveQuizGroup(userId, request);
         return new ResponseEntity<>(new ResultDto<>("퀴즈 그룹 등록", savedId), HttpStatus.CREATED);
@@ -67,12 +64,8 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController {
     @PutMapping("/v1/quizgroups/{quizgroupId}")
     public ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestBody UpdateQuizGroupRequest request,
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
-    ) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>(new ResultDto<>("인증 실패", -1L), HttpStatus.UNAUTHORIZED);
-        }
-        String accessToken = authorizationHeader.substring(7);
-        int userId = Integer.parseInt(jwtProvider.getUserId(accessToken));
+    ) throws InvalidAuthorizationHeaderException {
+        int userId = getUserIdFrom(authorizationHeader);
 
         Long updatedId = quizGroupService.updateQuizGroup(userId, request);
         return new ResponseEntity<>(new ResultDto<>("퀴즈 그룹 수정", updatedId), HttpStatus.OK);
@@ -81,14 +74,18 @@ public class QuizGroupApiControllerImpl implements QuizGroupApiController {
     @DeleteMapping("/v1/quizgroups/{quizgroupId}")
     public ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId,
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
-    ) {
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return new ResponseEntity<>(new ResultDto<>("인증 실패", -1L), HttpStatus.UNAUTHORIZED);
-        }
-        String accessToken = authorizationHeader.substring(7);
-        int userId = Integer.parseInt(jwtProvider.getUserId(accessToken));
+    ) throws InvalidAuthorizationHeaderException {
+        int userId = getUserIdFrom(authorizationHeader);
 
         quizGroupService.removeQuizGroup(userId, quizgroupId);
         return new ResponseEntity<>(new ResultDto<>("퀴즈 그룹 삭제", 0L), HttpStatus.NO_CONTENT);
+    }
+
+    private int getUserIdFrom(String authorizationHeader) throws InvalidAuthorizationHeaderException {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new InvalidAuthorizationHeaderException("authorizationHeader가 적절하지 않습니다.");
+        }
+        String accessToken = authorizationHeader.substring(7);
+        return Integer.parseInt(jwtProvider.getUserId(accessToken));
     }
 }
