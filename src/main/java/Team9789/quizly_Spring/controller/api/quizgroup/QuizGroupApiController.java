@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 @RestController
@@ -27,9 +28,9 @@ public interface QuizGroupApiController {
 
     ResponseEntity<ResultDto<QuizGroupDto>> findQuizGroupOneV1(@PathVariable("quizgroupId") Long quizgroupId);
 
-    ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<ResultDto<Long>> addQuizGroupV1(@RequestParam("Quizgroup") CreateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) throws AuthenticationException;
 
-    ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<ResultDto<Long>> updateQuizGroupV1(@RequestParam("Quizgroup") UpdateQuizGroupRequest request, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) throws AuthenticationException;
 
-    ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader);
+    ResponseEntity<ResultDto<Long>> removeQuizGroupV1(@PathVariable("quizgroupId") Long quizgroupId, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) throws AuthenticationException;
 }
