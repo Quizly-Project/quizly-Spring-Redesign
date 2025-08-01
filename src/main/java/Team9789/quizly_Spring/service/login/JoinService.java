@@ -22,15 +22,15 @@ public class JoinService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public void joinProcess(JoinDTO joinDTO) {
+    public void joinProcess(JoinDTO joinDTO) throws UserExistException {
 
         String username = joinDTO.getUsername();
         String password = joinDTO.getPassword();
         String email = joinDTO.getEmail();
 
-        Optional<UserEntity> result = userRepository.findByUsername(username);
+        Optional<UserEntity> userOptional = userRepository.findByUsername(username);
 
-        if (result.isEmpty()) {
+        if (userOptional.isEmpty()) {
             UserEntity data = UserEntity.to(username, bCryptPasswordEncoder.encode(password), email);
             userRepository.save(data);
             return;
